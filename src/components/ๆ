@@ -1,0 +1,185 @@
+import React from 'react';
+import FormRow from './FormRow';
+import { formatThaiDate } from '../utils/dateUtils';
+import html2pdf from 'html2pdf.js';
+
+const FormTable = ({
+  formSections,
+  responses,
+  handleChange,
+  handleNoteChange,
+  agency,
+  setAgency,
+  endDate,
+  setEndDate,
+}) => {
+  const handleExportPDF = () => {
+    const element = document.getElementById('report-content');
+
+    if (!element) {
+      alert('ไม่พบเนื้อหาสำหรับสร้าง PDF');
+      return;
+    }
+
+    const opt = {
+      margin: 0.5, // นิ้ว
+      filename: 'internal-control-report.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+    };
+
+    html2pdf().set(opt).from(element).save();
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-10">
+      {/* PDF Export Button */}
+      <div className="flex justify-end mb-6">
+        <button
+          onClick={handleExportPDF}
+          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-xl shadow"
+        >
+          📄 บันทึกเป็น PDF
+        </button>
+      </div>
+
+      {/* Content for PDF */}
+      <div id="report-content">
+       <div className="max-w-7xl mx-auto px-4 py-10">
+      {/* Content for PDF */}
+      <div id="report-content">
+        {/* Header Section */}
+        <div className="text-center space-y-4 border-gray-200 pt-10">
+          <p className="text-lg text-gray-700">
+            หน่วยงาน{' '}
+            <span className="underline decoration-dotted decoration-gray-400">
+              {agency || '........................................'}
+            </span>
+          </p>
+          <p className="text-2xl font-bold text-gray-900">
+            รายงานการประเมินองค์ประกอบของการควบคุมภายใน
+          </p>
+          <p className="text-lg text-gray-700">
+            สำหรับระยะเวลาดำเนินงานที่สิ้นสุด ณ วันที่
+            <span className="underline font-bold ml-2 inline-block min-w-[180px] text-gray-800">
+              {formatThaiDate(endDate)}
+            </span>
+          </p>
+        </div>
+
+        {/* Input Fields */}
+        <div className="mt-10 flex justify-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* หน่วยงาน */}
+            <div>
+              <label className="block text-sm font-medium text-gray-800 mb-2">
+                หน่วยงาน <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                className="w-full md:w-[300px] border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-400 shadow-sm"
+                placeholder="กรอกชื่อหน่วยงาน"
+                value={agency}
+                onChange={(e) => setAgency(e.target.value)}
+              />
+            </div>
+
+            {/* วันที่สิ้นสุด */}
+            <div>
+              <label className="block text-sm font-medium text-gray-800 mb-2">
+                วันที่สิ้นสุด <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="date"
+                className="w-full md:w-[200px] border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-700 shadow-sm"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Table */}
+        <div className="mt-12 bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full table-auto text-sm">
+              <thead className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200">
+                <tr>
+                  <th className="px-6 py-4 text-left font-semibold text-gray-800 border-r border-gray-200 w-1/4">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-blue-600">📋</span>
+                      <span>5 องค์ประกอบ</span>
+                    </div>
+                  </th>
+                  <th className="px-6 py-4 text-left font-semibold text-gray-800 border-r border-gray-200 w-1/4">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-green-600">⚡</span>
+                      <span>17 หลักการ</span>
+                    </div>
+                  </th>
+                  <th className="px-6 py-4 text-left font-semibold text-gray-800 border-r border-gray-200 w-1/2">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-purple-600">❓</span>
+                      <span>ประเด็นการประเมิน</span>
+                    </div>
+                  </th>
+                  <th className="px-4 py-4 text-center font-semibold text-gray-800 border-r border-gray-200 min-w-[80px]">
+                    <div className="flex flex-col items-center space-y-1">
+                      <span className="text-green-500 text-lg">✓</span>
+                      <span className="text-xs">มี</span>
+                    </div>
+                  </th>
+                  <th className="px-4 py-4 text-center font-semibold text-gray-800 border-r border-gray-200 min-w-[80px]">
+                    <div className="flex flex-col items-center space-y-1">
+                      <span className="text-red-500 text-lg">✗</span>
+                      <span className="text-xs">ไม่มี</span>
+                    </div>
+                  </th>
+                  <th className="px-6 py-4 text-left font-semibold text-gray-800 min-w-[120px]">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-yellow-600">📝</span>
+                      <span>หมายเหตุ</span>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 bg-white">
+                {formSections.map((section) =>
+                  section.principles.map((principle) =>
+                    principle.questions.map((question) => (
+                      <FormRow
+                        key={question.id}
+                        question={question}
+                        responses={responses}
+                        handleChange={handleChange}
+                        handleNoteChange={handleNoteChange}
+                        showSectionInfo={principle.questions[0].id === question.id}
+                        sectionTitle={section.title}
+                        sectionSubtitle={section.subtitle}
+                        showPrincipleInfo={principle.questions[0].id === question.id}
+                        principleTitle={principle.title}
+                        principleDescription={principle.description}
+                      />
+                    ))
+                  )
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Footer */}
+          <div className="px-6 py-3 bg-gray-50 border-t border-gray-100">
+            <p className="text-xs text-gray-500 text-center">
+              กรุณาตรวจสอบข้อมูลให้ครบถ้วนก่อนส่ง
+            </p>
+          </div>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default FormTable;
