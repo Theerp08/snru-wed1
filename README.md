@@ -8,7 +8,7 @@
 - ⚡ Vite 6 – Dev server ที่เร็วและใช้งานง่าย
 - 🎨 TailwindCSS 4 – สำหรับออกแบบหน้าตา
 - 📅 React Datepicker – สำหรับเลือกวันที่
-- 🧾 jsPDF / html2pdf.js / html2canvas – สร้างเอกสาร PDF
+- 🧾 jsPDF – สร้างเอกสาร PDF
 - 🧭 React Router v7 – สำหรับจัดการหน้า
 - ✅ ESLint – ตรวจสอบคุณภาพโค้ด
 
